@@ -1,0 +1,72 @@
+<h1>.::HOME::.</h1>
+{{title}}
+<form>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Lista usuarios</mat-label>
+    <mat-select [formControl]="usuarioControl" required [(ngModel)]="userSelect" name="user" panelClass="example-panel-blue">
+      <mat-option *ngFor="let user of userList" [value]="user">
+        {{user.nombre}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="usuarioControl.hasError('required')">Debe seleccionar un usuario</mat-error>
+  </mat-form-field>
+
+  <button mat-button (click)="openDialog('Agregar',{})" mat-flat-button color="primary" >Agregar Producto</button>
+
+  <table mat-table [dataSource]="itemList">
+    <ng-container matColumnDef="_id">
+      <th mat-header-cell *matHeaderCellDef> CODIGO ITEM </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemName">
+      <th mat-header-cell *matHeaderCellDef> PRODUCTO </th>
+      <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cuantity">
+      <th mat-header-cell *matHeaderCellDef> CANTIDAD </th>
+      <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateAdd">
+      <th mat-header-cell *matHeaderCellDef> FECHA REGISTRO </th>
+      <td mat-cell *matCellDef="let element">
+        <span>{{element.fechaCreacion | date:'medium'}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="userAdd">
+      <th mat-header-cell *matHeaderCellDef> USUARIO CREADOR </th>
+      <td mat-cell *matCellDef="let element"> {{element.usuarioCreacion.nombre}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateUpdate">
+      <th mat-header-cell *matHeaderCellDef> FECHA MODIFICACION </th>
+      <td mat-cell *matCellDef="let element">
+        <span *ngIf="element.fechaModificacion">{{element.fechaModificacion | date:'medium'}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="userUpdate">
+      <th mat-header-cell *matHeaderCellDef> USUARIO MODIFICADOR </th>
+      <td mat-cell *matCellDef="let element">
+        <span *ngIf="element.usuarioModificacion">
+          {{element.usuarioModificacion.nombre}}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Accion </th>
+      <td mat-cell *matCellDef="let element" class="action-link">
+        <a (click)="openDialog('Actualizar',element)">Modificar</a> |
+        <a *ngIf="userSelect && element.usuarioCreacion.id == userSelect.id" (click)="openDialog('Eliminar',element)">Eliminar</a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="nameColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: nameColumns;"></tr>
+  </table>
+</form>

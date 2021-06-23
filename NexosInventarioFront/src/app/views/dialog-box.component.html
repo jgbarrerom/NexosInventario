@@ -1,0 +1,23 @@
+<!-- dialog-box.component.html -->
+<h1 mat-dialog-title>Se va a <strong>{{action}}</strong></h1>
+<div mat-dialog-content>
+  <mat-form-field *ngIf="action != 'Eliminar'; else elseTemplate">
+    <input placeholder="{{action}} Producto" matInput [(ngModel)]="local_data.nombre">
+  </mat-form-field>
+  <mat-form-field *ngIf="action != 'Eliminar'">
+    <input type="number" min="0" placeholder="{{action}} Cantidad" matInput [(ngModel)]="local_data.cantidad">
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="action == 'Agregar'">
+    <mat-label>Fecha Ingreso</mat-label>
+    <input matInput [matDatepicker]="picker" [max]="maxDate" [(ngModel)]="local_data.fechaCreacion">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <ng-template #elseTemplate>
+    Seguro quiere eliminar el producto : <b>{{' ' + local_data.nombre + ' '}}</b> ?
+  </ng-template>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="doAction()">{{action}}</button>
+  <button mat-button (click)="closeDialog()" mat-flat-button color="warn">Cancel</button>
+</div>
